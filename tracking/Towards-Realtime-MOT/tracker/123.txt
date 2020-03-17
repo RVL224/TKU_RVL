@@ -1,0 +1,26 @@
+全域list
+self.tracked_stracks (list)
+self.lost_stracks (list)
+self.removed_stracks (list)
+
+part1
+1. model傳出result (detection & embedding)
+2. 刪除信心分數小於閥值(0.3)的結果
+3. 將每一組結果建立一個 'strack' 的類別
+
+part2
+
+區域list
+unconfirmed (list)
+tracked_stracks (list)
+
+1. 將 self.tracked_stracks 中的 strack 取出
+   如果 strack 為啟動,則加入 tracked_stracks 中
+   否則 加入 unconfirmed
+
+part3
+
+1. 將 tracked_stracks 和 self.lost_stracks 合併為 strack_pool
+   (將 self.lost_stracks 中 id 不與 tracked_stracks重複的 strack 加入 tracked_stracks, 並將之稱為
+   strack_pool)
+2. 每個strack 各自 strack.predict()
