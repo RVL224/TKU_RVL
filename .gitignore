@@ -1,0 +1,10 @@
+# for workspace
+__pycache__/
+*.pyc
+*.ipynb_checkpoints
+*.ipynb
+
+dataset/
+save_models/
+out/
+logs/

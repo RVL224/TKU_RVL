@@ -1,0 +1,4 @@
+{
+  "label_path": "/tf/minda/github/detect_ws/dataset/bdd/BDD_train/Annotations/",
+  "out_path": "/tf/minda/github/TKU_RVL/dataset/csv/bdd/train.csv"
+}

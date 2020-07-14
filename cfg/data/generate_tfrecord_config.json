@@ -1,0 +1,5 @@
+{
+  "csv_path": "/tf/minda/github/TKU_RVL/dataset/csv/bdd/train.csv",
+  "img_path": "/tf/minda/github/detect_ws/dataset/bdd/BDD_train/JPEGImages/",
+  "out_path": "/tf/minda/github/TKU_RVL/dataset/tfrecord/bdd/train.record"
+}
