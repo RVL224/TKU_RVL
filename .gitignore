@@ -5,6 +5,7 @@ __pycache__/
 *.ipynb
 
 dataset/
-save_models/
+pytorch_model/
+tensorflow_model/
 out/
 logs/

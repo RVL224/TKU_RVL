@@ -6,37 +6,40 @@
 
 ## 準備資料集
 
-1. 使用框圖程式製作訓練集  
+1. 建立dataset資料夾  
 
-    1.1. labelme
+2. 使用框圖程式製作訓練集  
+
+    2.1. labelme
     
-2. 轉換成VOC-format Dataset  
+3. 轉換成VOC-format Dataset  
     
-    2.1. 可使用框圖程式內建轉換
+    3.1. 可使用框圖程式內建轉換  
+    3.2. 將生成的資料集放於dataset中
     
-3. VOC-format Dataset to csv file  
+4. VOC-format Dataset to csv file  
     
-    3.1. 編輯 xml2csv_config.json 
+    4.1. 編輯 xml2csv_config.json 
     ```bash
       * label_path: 資料集的標註檔案位置 : (Annotations)
-      * out_path: 輸出csv檔案的位置與檔名(.csv)
+      * out_path: 輸出csv檔案的位置與檔名 : (.csv)
     ```
     
-    3.2. 執行
+    4.2. 執行
     ```bash
       $ python xml_to_csv.py --config_path <your_xml2csv_config_json_path>
     ```
     
-4. csv to tfrecord  
+5. csv to tfrecord  
     
-    4.1. 編輯 generate_tfrecord_config.json
+    5.1. 編輯 generate_tfrecord_config.json
     ```bash
-      * csv_path: 上個步驟輸出的csv檔案位置 (.csv)
+      * csv_path: 上個步驟輸出的csv檔案位置 : (.csv)
       * img_path: 資料集的圖片路徑 : (JPEGImages)
-      * out_path: 輸出record檔案的位置與檔名(.record)
+      * out_path: 輸出record檔案的位置與檔名 : (.record)
     ```
     
-    4.2. 編輯 generate_tfrecord.py 中的 categoryText2Int function
+    5.2. 編輯 generate_tfrecord.py 中的 categoryText2Int function
     * 需符合dataset class 格式
     ```py
 
@@ -70,6 +73,13 @@
          .
          .
     ```
+
+## 讀取 pytorch 權重  
+
+1. 
+
+2. 將pytorch權重 NCHW 轉換成 NHWC 並生成 pickle file
+
 
 ## 參考
 
