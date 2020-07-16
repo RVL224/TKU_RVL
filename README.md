@@ -14,11 +14,11 @@
     
 3. 轉換成VOC-format Dataset  
     
-    3.1. 可使用框圖程式內建轉換  
+    3.1. 可使用框圖程式內建轉換或自己寫格式
     3.2. 將生成的資料集放於dataset中
     
 4. VOC-format Dataset to csv file  
-    
+    * csv 輸出每行格式為 (filename,width,height,class,xmin,ymin,xmax,ymax)
     4.1. 編輯 xml2csv_config.json 
     ```bash
       * label_path: 資料集的標註檔案位置 : (Annotations)
@@ -84,7 +84,7 @@
 ```
 
 2. 編輯 config file  
-
+    * 參考放於 cfg/train/
 ```config
 
   model {
@@ -199,9 +199,13 @@
     * pytorch model 請參考 lufficc pytorch ssd
     * 讀取權重是利用 "pickle 檔" 讀取
   
-    3.1. 編輯 train.bash
+    3.1. 編輯 train.bash  
+        * 參考放於 src/
     ```bash
-      python <path_of_train.py>
+      CUDA_VISIBLE_DEVICES=0 python <path_of_train.py>
+      
+      # 選取顯卡 0, 1, ...
+      CUDA_VISIBLE_DEVICES=0
 
       # 輸出模型位置
       --train_dir=<output_path>
@@ -219,10 +223,91 @@
 
       # 讀取 pytorch 權重 (fine_tune_checkpoint 需開啟)
       --load_pytorch=True
+    ```  
+    
+    3.2. 執行
+    ```bash
+        $ ./train.bash
     ```
 
 4. 將pytorch權重 NCHW 轉換成 NHWC 並生成 pickle file  
     * 詳情請看 tutorial
+
+## Demo tensorflow model  
+
+1. 固化模型  
+
+    1.1. 編輯 frozen_graph.bash  
+        * 參考放於　src/
+    ```bash
+      CUDA_VISIBLE_DEVICES=0 python <path_of_export_inference_graph.py>
+        
+      # 選取顯卡 0, 1, ...
+      CUDA_VISIBLE_DEVICES=0
+      
+      # 訓練模型的參數檔位置
+      --pipeline_config_path=<config_path>
+        
+      # 訓練模型的權重位置
+      --trained_checkpoint_prefix=<ckpt_path>
+        
+      # 固化模型輸出位置
+      --output_directory=<output_dir>
+    ```
+    
+    1.2 執行　　
+    ```bash
+        $ ./frozen_graph.bash
+    ```
+    
+2. 測試模型  
+
+    2.1. 編輯 detect_process.json  
+        * 參考放於　cfg/demo
+    ```json
+      * PATH_FROZEN_GRAPH : 固化模型位置
+      * PATH_TFLITE : tflite 模型位置
+      * PATH_TO_LABELS : dataset class label 位置
+      * DATASET_NAME: our, voc case
+      * NUM_CLASSES: class num
+      * THRESHOLD_BBOX: bounding box 閥值
+
+      * VIDEO_FILE : 測試影片位置
+      * IMAGE_DATASET : 測試多張圖片位置
+      * SINGE_IMAGE : 測試單張圖片位置
+
+      * RESULT_OUT : 結果儲存位置
+
+      # test mAP
+      * USE_07_METRIC : 是否使用 voc 2007 evaluation
+      * VAL_THRESHOLD : 驗證 bbox 的門檻
+      * VAL_MAP :  用於驗證精準度之測試集位置
+      * VAL_MAP_OUT : 輸出驗證結果
+
+      # 尚未驗證
+      * PATH_TPU : edgetpu 模型位置
+    ```
+    
+    2.2. 執行 demo  
+   ```bash
+     $ python detect_process.py
+        
+     # args
+       # 參數檔位置
+       --config_path = <path_of_detect_process.json>
+
+       # 選擇模型 <graph tflite tpu>
+       --engine=graph
+
+       # 測試模式 <video, image, images, map>
+       --mode=video
+
+       # 儲存圖片
+       --save=false
+
+       # 顯示圖片
+       --show=false
+    ```
 
 ## 參考
 
