@@ -198,7 +198,8 @@
     * 強調 pytorch model 必須與 tensorflow model "一模一樣" 才能讀取 weight
     * pytorch model 請參考 lufficc pytorch ssd
     * 讀取權重是利用 "pickle 檔" 讀取
-  
+    * 通常檔案會放於 save_models/tensorflow/tensorflow_model 中，方便之後不用從讀權重，即可訓練　　
+    
     3.1. 編輯 train.bash  
         * 參考放於 src/
     ```bash
@@ -258,11 +259,88 @@
     1.2 執行　　
     ```bash
         $ ./frozen_graph.bash
+    ```  
+
+2. 轉換tflite模型  
+
+    2.1. 編輯 transfer.bash 
+        * 參考放於　src/
+    ```bash
+      
+      # ===============================
+      # 輸出定義圖
+      
+      CUDA_VISIBLE_DEVICES=0 python <path_of_export_tflite_ssd_graph.py>
+        
+      # 選取執行顯卡 0, 1, ...
+      CUDA_VISIBLE_DEVICES=0
+      
+      # 訓練模型的參數檔位置
+      --pipeline_config_path=<config_path>
+        
+      # 訓練模型的權重位置
+      --trained_checkpoint_prefix=<ckpt_path>
+        
+      # tflite模型輸出位置
+      --output_directory=<output_dir>
+      
+      # 是否添加後處理
+      --add_postprocessing_op＝true
+      
+      ＃ 最大偵測數量
+      --max_detections=30
+      
+      # ===============================
+      # 官方內建 輸出 tflite 模型
+      
+      tflite_convert 
+      
+      # tflite模型輸出位置 : (.tflite)
+      --output_file
+      
+      # 輸入定義圖 : (.pb)
+      --graph_def_file
+      
+      # 模型精度 : (FLOAT, QUANTIZED_UINT8)
+      --inference_type
+      
+      # 輸入tensor名稱 (通常: normalized_input_image_tensor)
+      --input_arrays
+      
+      # 輸出tensor名稱 (如果有加入後處理: TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3)
+      -output_arrays
+      
+      # 量化處理需要(對參數影響很大)
+      --mean_values
+      --std_dev_values
+      
+      # 輸入tensor的形狀
+      --input_shapes
+      
+      # 允許後處理
+      --allow_custom_ops
+      
+      # 量化不完全可使用 (同常使用map 會大幅下降)
+      --default_ranges_min
+      --default_ranges_max
+      
+      # default
+      --allow_nudging_weights_to_use_fast_gemm_kernel=true
+      --change_concat_input_ranges=false
+      
     ```
     
-2. 測試模型  
+    2.2 執行　　
+    ```bash
+        $ ./transfer.bash
+    ```
+    
+    2.3 備註
+        * 利用post training 進行量化, 請參考 [Tensorflow Lite post-training]
+    
+3. 測試模型  
 
-    2.1. 編輯 detect_process.json  
+    3.1. 編輯 detect_process.json  
         * 參考放於　cfg/demo
     ```json
       * PATH_FROZEN_GRAPH : 固化模型位置
@@ -288,7 +366,7 @@
       * PATH_TPU : edgetpu 模型位置
     ```
     
-    2.2. 執行 demo  
+    3.2. 執行 demo  
    ```bash
      $ python detect_process.py
         
@@ -308,6 +386,12 @@
        # 顯示圖片
        --show=false
     ```
+    
+    3.3 備註  
+    ```txt
+        * graph, tflite, edgetpu model (不管是否有量化)
+        # demo程式 單純只針對特定幾個模型進行前處理調整，如果當前處理方式改變或有些許差異，就必須調整前處理方式
+    ```
 
 ## 參考
 
@@ -319,4 +403,5 @@
     2.1. 量化達人
     * [Super PINTO](https://twitter.com/PINTO03091)
     * [PINTO_model_zoo](https://github.com/PINTO0309/PINTO_model_zoo)
+    * [Tensorflow Lite post-training](https://qiita.com/PINTO/items/008c54536fca690e0572)
  

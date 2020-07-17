@@ -1,6 +1,6 @@
 {
   "PATH_FROZEN_GRAPH": "/tf/minda/github/TKU_RVL/out/ssdlite_mobilenet_fpn6_mixconv_512_bdd/save_model/frozen_inference_graph.pb",
-  "PATH_TFLITE": "mobilenet.tflite",
+  "PATH_TFLITE": "/tf/minda/github/TKU_RVL/out/ssdlite_mobilenet_fpn6_mixconv_512_bdd/tflite/mobilenet_30.tflite",
   "PATH_TPU": "mobilenet_edgetpu.tflite",
 
   "PATH_TO_LABELS": "../label/bdd_label_map_custom.pbtxt",
@@ -9,7 +9,7 @@
   "NUM_CLASSES": 7,
   "THRESHOLD_BBOX": 0.3,
 
-  "VIDEO_FILE": "../dataset/demo/video/taipei_road2.mp4",
+  "VIDEO_FILE": "../dataset/demo/video/taipei_road.mp4",
   "SINGE_IMAGE": "../dataset/demo/images/af4bcae9-00000000.jpg",
   "IMAGE_DATASET": "../dataset/waymo/waymo_demo/Unlabel_JPG/FRONT_LEFT",
   "RESULT_OUT": "/tf/minda/github/TKU_RVL/out/test",

@@ -144,8 +144,15 @@ def test_mAP(cfg, engine, args):
         frame_expanded = np.expand_dims(frame_rgb, axis=0)
     elif(args.engine == 'tflite'):
         frame_resize = cv2.resize(frame_rgb,(512,512))
+        # float model
+        # frame_resize = frame_resize - np.array([123, 117, 104])
+        # frame_resize = frame_resize.astype(np.float32)
+        
+        # quantize model
+        frame_resize = frame_resize.astype(np.uint8)
         frame_expanded = np.expand_dims(frame_resize, axis=0)
     elif(args.engine == 'tpu'):
+        frame_rgb = cv2.resize(frame_rgb,(512,512))
         frame_expanded = Image.fromarray(frame_rgb)
     
     
@@ -189,10 +196,15 @@ def show_image(cfg,engine,args,mode = 'single'):
       frame_expanded = np.expand_dims(frame_rgb, axis=0)
     elif(args.engine == 'tflite'):
       frame_resize = cv2.resize(frame_rgb,(512,512))
-      # frame_resize = (frame_resize - np.array([123, 117, 104])).astype(np.uint8)
+      # float model
+      # frame_resize = frame_resize - np.array([123, 117, 104])
       # frame_resize = frame_resize.astype(np.float32)
+        
+      # quantize model
+      frame_resize = frame_resize.astype(np.uint8)
       frame_expanded = np.expand_dims(frame_resize, axis=0)
     elif(args.engine == 'tpu'):
+      frame_rgb = cv2.resize(frame_rgb,(512,512))
       frame_expanded = Image.fromarray(frame_rgb)
 
     bboxes, num_detections = engine.Run(frame_expanded, im_width, im_height)
@@ -219,9 +231,15 @@ def show_image(cfg,engine,args,mode = 'single'):
         frame_expanded = np.expand_dims(frame_rgb, axis=0)
       elif(args.engine == 'tflite'):
         frame_resize = cv2.resize(frame_rgb,(512,512))
+        # float model
+        # frame_resize = frame_resize - np.array([123, 117, 104])
         # frame_resize = frame_resize.astype(np.float32)
+        
+        # quantize model
+        frame_resize = frame_resize.astype(np.uint8)
         frame_expanded = np.expand_dims(frame_resize, axis=0)
       elif(args.engine == 'tpu'):
+        frame_rgb = cv2.resize(frame_rgb,(512,512))
         frame_expanded = Image.fromarray(frame_rgb)
 
       bboxes, num_detections = engine.Run(frame_expanded, im_width, im_height)
@@ -279,8 +297,15 @@ def show_video(cfg,engine,args):
         frame_expanded = np.expand_dims(frame_rgb, axis=0)
       elif(args.engine == 'tflite'):
         frame_resize = cv2.resize(frame_rgb,(512,512))
+        # float model
+        # frame_resize = frame_resize - np.array([123, 117, 104])
+        # frame_resize = frame_resize.astype(np.float32)
+        
+        # quantize model
+        frame_resize = frame_resize.astype(np.uint8)
         frame_expanded = np.expand_dims(frame_resize, axis=0)
       elif(args.engine == 'tpu'):
+        frame_rgb = cv2.resize(frame_rgb,(512,512))
         frame_expanded = Image.fromarray(frame_rgb)
 
       s_inference = time.time()
