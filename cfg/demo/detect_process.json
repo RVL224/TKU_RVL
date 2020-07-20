@@ -18,5 +18,5 @@
   "FP_THRESHOLD": 0.3,
   "VAL_THRESHOLD": 0.01,
   "VAL_MAP": "../dataset/val/bdd/val_tf.txt",
-  "VAL_MAP_OUT": "../out/ssdlite_mobilenet_v2_fpn_512_r2_anchor_3_bdd/eval.txt"
+  "VAL_MAP_OUT": "../out/eval/ssdlite_mobilenet_fpn6_mixconv_512_bdd"
 }

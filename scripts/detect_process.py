@@ -5,6 +5,7 @@ import argparse
 import glob
 import numpy as np
 import time
+from datetime import datetime, timedelta, timezone
 import cv2
 from PIL import Image
 from tqdm import trange
@@ -130,8 +131,8 @@ def test_mAP(cfg, engine, args):
     val_preds format : [pred_box_0, pred_box_1]
     pred_box format : [image_id, x_min, y_min, x_max, y_max, score, label]
   """
-  # ground true
-  gt_dict, pic_dict = parse_gt_rec(cfg['VAL_MAP'], target_img_size=[512, 512], letterbox_resize=False)
+#   # ground true
+#   gt_dict, pic_dict = parse_gt_rec(cfg['VAL_MAP'], target_img_size=[512, 512], letterbox_resize=False)
   
   # predict
   val_preds = []
@@ -160,26 +161,47 @@ def test_mAP(cfg, engine, args):
     val_preds.extend(pred_content)
   
   print('predict success')
+   
+  ### 
+  mkdir(cfg["VAL_MAP_OUT"])
+  dt_string = datetime.now(timezone(timedelta(hours=+8))).strftime("%Y%m%d_%H_%M_%S")
+  result_file_path = cfg["VAL_MAP_OUT"]+"/result_{}.txt".format(dt_string)
   
-  print('mFP eval:')
-  m_fp, m_det = voc_eval_fp_custom(gt_dict, val_preds, cfg['FP_THRESHOLD'])
-  print("final mFP : {} \n".format(m_fp/m_det))
-
-  rec_total, prec_total, ap_total = AverageMeter(), AverageMeter(), AverageMeter()
+  print(result_file_path)
   
-  print('mAP eval:')
-  for ii in range(1, cfg['NUM_CLASSES']+1):
-    npos, nd, rec, prec, ap = voc_eval(gt_dict, val_preds, ii, iou_thres=0.5, use_07_metric=cfg['USE_07_METRIC'])
-    rec_total.update(rec, npos)
-    prec_total.update(prec, nd)
-    ap_total.update(ap, 1)
-    print('Class {}: Recall: {:.4f}, Precision: {:.4f}, AP: {:.4f}'.format(ii, rec, prec, ap))
-  
-  mAP = ap_total.average
-  print('final mAP: {:.4f}'.format(mAP))
-  print("recall: {:.3f}, precision: {:.3f}".format(rec_total.average, prec_total.average))
+  with open(result_file_path, "w") as outfile:
+    if(args.engine == 'graph'):
+      outfile.write("pb model path : {}\n\n".format(cfg["PATH_FROZEN_GRAPH"]))
+    elif(args.engine == 'tflite'):
+      outfile.write("tflite model path : {}\n\n".format(cfg["PATH_TFLITE"]))
+    elif(args.engine == 'tpu'):
+      outfile.write("edgetpu model path : {}\n\n".format(cfg["PATH_TPU"]))
     
-
+    print('mFP eval:')
+    outfile.write('mFP eval: \n')
+    
+    m_fp, m_det = voc_eval_fp_custom(gt_dict, val_preds, cfg['FP_THRESHOLD'])
+    print("final mFP : {} \n".format(m_fp/m_det))
+    outfile.write("final mFP : {} \n\n".format(m_fp/m_det))
+    
+    rec_total, prec_total, ap_total = AverageMeter(), AverageMeter(), AverageMeter()
+    
+    print('mAP eval:')
+    for ii in range(1, cfg['NUM_CLASSES']+1):
+      npos, nd, rec, prec, ap = voc_eval(gt_dict, val_preds, ii, iou_thres=0.5, use_07_metric=cfg['USE_07_METRIC'])
+      rec_total.update(rec, npos)
+      prec_total.update(prec, nd)
+      ap_total.update(ap, 1)
+      print('Class {}: Recall: {:.4f}, Precision: {:.4f}, AP: {:.4f}'.format(ii, rec, prec, ap))
+      outfile.write('Class {}: Recall: {:.4f}, Precision: {:.4f}, AP: {:.4f} \n'.format(ii, rec, prec, ap))
+    
+    mAP = ap_total.average
+    print('final mAP: {:.4f}'.format(mAP))
+    print("recall: {:.3f}, precision: {:.3f}".format(rec_total.average, prec_total.average))
+    
+    outfile.write('final mAP: {:.4f} \n'.format(mAP))
+    outfile.write("recall: {:.3f}, precision: {:.3f} \n".format(rec_total.average, prec_total.average))
+    
 def show_image(cfg,engine,args,mode = 'single'):
 
   if(args.show):

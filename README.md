@@ -343,8 +343,8 @@
     3.1. 編輯 detect_process.json  
         * 參考放於　cfg/demo
     ```json
-      * PATH_FROZEN_GRAPH : 固化模型位置
-      * PATH_TFLITE : tflite 模型位置
+      * PATH_FROZEN_GRAPH : 固化模型位置 (.pb)
+      * PATH_TFLITE : tflite 模型位置 (.tflite)
       * PATH_TO_LABELS : dataset class label 位置
       * DATASET_NAME: our, voc case
       * NUM_CLASSES: class num
@@ -354,17 +354,17 @@
       * IMAGE_DATASET : 測試多張圖片位置
       * SINGE_IMAGE : 測試單張圖片位置
 
-      * RESULT_OUT : 結果儲存位置
+      * RESULT_OUT : 結果儲存位置(資料夾)
 
       # test mAP
       * USE_07_METRIC : 是否使用 voc 2007 evaluation
       * FP_THRESHOLD : 誤報率的門檻
       * VAL_THRESHOLD : 驗證 bbox 的門檻
       * VAL_MAP :  用於驗證精準度之測試集位置
-      * VAL_MAP_OUT : 輸出驗證結果
+      * VAL_MAP_OUT : 輸出驗證結果位置(資料夾)
 
       # 尚未驗證
-      * PATH_TPU : edgetpu 模型位置
+      * PATH_TPU : edgetpu 模型位置 (.tflite)
     ```
     
     3.2. 執行 demo  
@@ -400,7 +400,7 @@
 
     1.1. 編輯 parse_voc_xml.json 參考
     ```json
-      * PATH_TO_DATASET : 驗證資料集位置 (voc 格式)
+      * PATH_TO_DATASET : 驗證資料集位置 (資料夾) (voc 格式)
       * PATH_TO_LABELS : dataset class label 位置
       * NUM_CLASSES : 類別數量 
       * OUT_PATH : 輸出驗證資料位置
