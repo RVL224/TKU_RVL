@@ -2,5 +2,5 @@
   "PATH_TO_DATASET": "/tf/minda/github/detect_ws/dataset/bdd/BDD_test",
   "PATH_TO_LABELS": "../label/bdd_label_map_custom.pbtxt",
   "NUM_CLASSES": 7,
-  "OUT_PATH": "/tf/minda/github/detect_ws/dataset/bdd/BDD_test/val_tf.txt"
+  "OUT_PATH": "/tf/minda/github/TKU_RVL/dataset/val/bdd/val_tf.txt"
 }

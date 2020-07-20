@@ -358,6 +358,7 @@
 
       # test mAP
       * USE_07_METRIC : 是否使用 voc 2007 evaluation
+      * FP_THRESHOLD : 誤報率的門檻
       * VAL_THRESHOLD : 驗證 bbox 的門檻
       * VAL_MAP :  用於驗證精準度之測試集位置
       * VAL_MAP_OUT : 輸出驗證結果
@@ -392,6 +393,47 @@
         * graph, tflite, edgetpu model (不管是否有量化)
         # demo程式 單純只針對特定幾個模型進行前處理調整，如果當前處理方式改變或有些許差異，就必須調整前處理方式
     ```
+    
+## 驗證模型
+
+1. 生成驗證資料  
+
+    1.1. 編輯 parse_voc_xml.json 參考
+    ```json
+      * PATH_TO_DATASET : 驗證資料集位置 (voc 格式)
+      * PATH_TO_LABELS : dataset class label 位置
+      * NUM_CLASSES : 類別數量 
+      * OUT_PATH : 輸出驗證資料位置
+    ```  
+    
+    1.2. 生成
+    ```bash
+      $ python parse_voc_xml.py
+        
+      # args
+        # 參數檔位置
+        --config_path = <path_of_parse_voc_xml.json>
+    ```  
+    
+2. 執行驗證  
+    
+    2.1. 編輯 detect_process.json 參考 [3.1. 編輯 detect_process.json](3.1.-編輯-detect_process.json)  
+    
+    2.2. 執行  
+    ```bash
+      $ python detect_process.py
+        
+      # args
+        # 參數檔位置
+        --config_path = <path_of_detect_process.json>
+
+        # 選擇模型 <graph tflite tpu>
+        --engine=graph
+
+        # 驗證模式 map
+        --mode=map
+    ```
+    
 
 ## 參考
 

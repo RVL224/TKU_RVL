@@ -13,11 +13,18 @@ def parse_args():
   parser.add_argument(
     "--config_path",\
     type = str,\
-    default="/tf/minda/github/detect_ws/cfg/data/parse_voc_xml.json",\
+    default="/tf/minda/github/TKU_RVL/cfg/data/parse_voc_xml.json",\
     help="config path")
 
   args = parser.parse_args()
   return args
+
+def mkdir(*directories):
+  for directory in list(directories):
+    if not os.path.exists(directory):
+      os.makedirs(directory)
+    else:
+      pass
 
 def create_category_name(categories):
   category_index = {}
@@ -58,7 +65,10 @@ def gen_test_txt(cfg, category_name):
   test_path = [os.path.join(cfg['PATH_TO_DATASET'], 'ImageSets/Main/test.txt')]
   anno_path = [os.path.join(cfg['PATH_TO_DATASET'], 'Annotations')]
   img_path = [os.path.join(cfg['PATH_TO_DATASET'], 'JPEGImages')]
-
+  
+  # print(os.path.dirname(cfg["OUT_PATH"]))
+  mkdir(os.path.dirname(cfg["OUT_PATH"]))
+  
   with open(cfg['OUT_PATH'], "w") as outfile:
     test_cnt = 0
     for i, path in enumerate(test_path):

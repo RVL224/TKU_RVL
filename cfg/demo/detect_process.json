@@ -1,5 +1,5 @@
 {
-  "PATH_FROZEN_GRAPH": "/tf/minda/github/TKU_RVL/out/ssdlite_mobilenet_fpn6_mixconv_512_bdd/save_model/frozen_inference_graph.pb",
+  "PATH_FROZEN_GRAPH": "/tf/minda/github/TKU_RVL/save_models/tensorflow/tensorflow_model/ssdlite_mobilenet_fpn6_mixconv_512_bdd/save_model/frozen_inference_graph.pb",
   "PATH_TFLITE": "/tf/minda/github/TKU_RVL/out/ssdlite_mobilenet_fpn6_mixconv_512_bdd/tflite/mobilenet_30.tflite",
   "PATH_TPU": "mobilenet_edgetpu.tflite",
 
@@ -17,6 +17,6 @@
   "USE_07_METRIC": false,
   "FP_THRESHOLD": 0.3,
   "VAL_THRESHOLD": 0.01,
-  "VAL_MAP": "../dataset/bdd/BDD_test/val.txt",
+  "VAL_MAP": "../dataset/val/bdd/val_tf.txt",
   "VAL_MAP_OUT": "../out/ssdlite_mobilenet_v2_fpn_512_r2_anchor_3_bdd/eval.txt"
 }
