@@ -417,7 +417,7 @@
     
 2. 執行驗證  
     
-    2.1. 編輯 detect_process.json 參考 [3.1. 編輯 detect_process.json](3.1.-編輯-detect_process.json)  
+    2.1. 編輯 detect_process.json 參考 (3.1. 編輯 detect_process.json)
     
     2.2. 執行  
     ```bash
