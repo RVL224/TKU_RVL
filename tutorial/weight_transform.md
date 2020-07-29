@@ -7,8 +7,8 @@
 | torch               | 1.2.0                     |
 | torchvision         | 0.4.0                     |
 | nvidia driver       | >= 430.64                 |
-| CUDA                | 10.0                      |
-| cudnn               | >= 10.0.130               |
+| CUDA                | 10.0.130                  |
+| cudnn               | 7.6                       |
 
 
 ## code 解釋
@@ -62,7 +62,7 @@
   * weight_transform.py args
     * config_file : pytorch model param yaml
     * ckpt : pytorch model weight pth
-    * check_torch : [bool] 查看並儲存 pytorch model all layer names 用來跟 tensorflow model 比較 (layer_name.txt)
+    * check_torch : [bool] 查看並儲存 pytorch model all layer names 用來跟 tensorflow model 比較 (<weight_pth_path>/layer_name.txt)
     * layer_name_torch : 排序過(pytorch model 和 tensorflow model 每層都需對應無誤)的所有層名稱之 layer_name_custom.txt 
     * layer_name_tf : tensorflow model all layer names
     * save_path : pickle path
