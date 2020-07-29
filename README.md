@@ -2,7 +2,35 @@
 
 ## Docker 架設
 
-## 環境設定
+
+
+## 環境  
+
+1. 環境  
+    
+| tool                | version                   |
+|---------------------|---------------------------|
+| cuda                | 10.0.130                  |
+| cudnn               | 7.6 (1.15)                |
+| python              | 3.6.9                     |
+| tensorflow-gpu      | 1.15                      |
+| protobuf-compiler   | 3.0.0                     |
+| openCV              | 3.4.7.28                  |
+| openCV-contrib      | 3.4.7.28                  |
+| pip                 | 19.3.1 above              |
+| python-pil          | 7.1.1                     |
+| python-lxml         | 4.5.0                     |
+| tqdm                | 4.45.0                    |
+| edgetpu_compiler    | 2.1.302470888 above       |
+| edgetpu_runtime     | 13                        |
+| torch               | 1.2.0                     |
+| torchvision         | 0.4.0                     |
+| yacs                | 0.1.7                     |    
+
+
+2. 架設  
+
+
 
 ## 準備資料集
 
@@ -168,7 +196,8 @@
     fine_tune_checkpoint_type: "detection"
     from_detection_checkpoint: true
   } 
-
+  
+  # 訓練和讀權重都會用到, 製作方法可參考準備資料集
   train_input_reader {
     # dataset class label
     label_map_path: "label.pbtxt"
