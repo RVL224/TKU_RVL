@@ -225,7 +225,9 @@ def train(create_tensor_dict_fn,
           graph_hook_fn=None,
           load_pytorch = False,
           pytorch_weight_path = "",
-          pytorch_layers_path = ""):
+          pytorch_layers_path = "",
+          check_model_layers=False):
+    
   """Training function for detection models.
 
   Args:
@@ -383,6 +385,10 @@ def train(create_tensor_dict_fn,
     saver = tf.train.Saver(
         keep_checkpoint_every_n_hours=keep_checkpoint_every_n_hours)
 
+    # check model all layers
+    if(check_model_layers):
+      check_model(train_dir)
+    
     # Create ops required to initialize the model from a given checkpoint.
     init_fn = None
     if train_config.fine_tune_checkpoint:
@@ -461,8 +467,6 @@ def train(create_tensor_dict_fn,
         init_fn = initializer_fn
         # ============
 
-    # check_model()
-
     slim.learning.train(
         train_tensor,
         logdir=train_dir,
@@ -478,19 +482,35 @@ def train(create_tensor_dict_fn,
         sync_optimizer=sync_optimizer,
         saver=saver)
 
-def check_model():
+def check_model(train_dir):
   var = [v for v in tf.global_variables()]
 
   count = 0
   for item in var:
     if(item.name[:-2].find("global_step") != -1):
       continue
-    if(item.name[:-2].find("RMSProp") != -1 or item.name[:-2].find("quant") != -1):
+    if(item.name[:-2].find("RMSProp") != -1 or \
+       item.name[:-2].find("quant") != -1 or \
+       item.name[:-2].find("Momentum") != -1 ):
       break
     count += 1
-    print(item)
-
+    print(item,count)
+  
   print("total layer {}".format(count))
+  
+  with open(train_dir+"/layer_name_tf.txt", "w") as outfile:
+    for item in var:
+      if(item.name[:-2].find("global_step") != -1):
+        continue
+      if(item.name[:-2].find("RMSProp") != -1 or \
+         item.name[:-2].find("quant") != -1 or \
+         item.name[:-2].find("Momentum") != -1 ):
+        break
+      outfile.write("{}\n".format(item))
+    outfile.write("total layer {}".format(count))
+
+  print("save {}".format(train_dir+"/layer_name_tf.txt"))
+    
   
   sys.exit()
 

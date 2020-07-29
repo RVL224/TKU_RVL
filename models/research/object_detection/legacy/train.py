@@ -91,6 +91,8 @@ flags.DEFINE_string('pytorch_weight_path', '',
                     'Path to a pytorch weight file.')
 flags.DEFINE_string('pytorch_layers_path', '',
                     'Path to a pytorch all layers name file.')
+flags.DEFINE_boolean('check_model', False,
+                    'wheather check tensorflow model')
 # ============
 
 FLAGS = flags.FLAGS
@@ -192,7 +194,8 @@ def main(_):
       graph_hook_fn=graph_rewriter_fn, 
       load_pytorch=FLAGS.load_pytorch,
       pytorch_weight_path=FLAGS.pytorch_weight_path,
-      pytorch_layers_path=FLAGS.pytorch_layers_path)
+      pytorch_layers_path=FLAGS.pytorch_layers_path,
+      check_model_layers=FLAGS.check_model)
 
 
 if __name__ == '__main__':

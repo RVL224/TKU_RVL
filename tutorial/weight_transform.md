@@ -62,12 +62,11 @@
   * weight_transform.py args
     * config_file : pytorch model param yaml
     * ckpt : pytorch model weight pth
-    * check_torch : [bool] 查看 pytorch model all layer names 用來跟 tensorflow model 對照 (可以先複製到 layer_name.txt)
+    * check_torch : [bool] 查看並儲存 pytorch model all layer names 用來跟 tensorflow model 比較 (layer_name.txt)
     * layer_name_torch : 排序過(pytorch model 和 tensorflow model 每層都需對應無誤)的所有層名稱之 layer_name_custom.txt 
     * layer_name_tf : tensorflow model all layer names
     * save_path : pickle path
 ```
-
 
 ## Reference
   * [lufficc pytorch ssd](https://github.com/lufficc/SSD?fbclid=IwAR2WFi1g6gbpH8GzSBBO-ERHTUIX7VXbPbTtK5Z-kIT1h-dSWlx3GEHkkqc)

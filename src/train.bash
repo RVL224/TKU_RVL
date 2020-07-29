@@ -16,4 +16,5 @@ CUDA_VISIBLE_DEVICES=0 python3 /tf/minda/github/TKU_RVL/models/research/object_d
 --pytorch_weight_path=${WEIGHT_FILE} \
 --pytorch_layers_path=${LAYERS_FILE} \
 --load_pytorch=False \
---train_dir=${MODEL_DIR}
+--train_dir=${MODEL_DIR} \
+--check_model=False

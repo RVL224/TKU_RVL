@@ -255,6 +255,11 @@
 
       # 讀取 pytorch 權重 (fine_tune_checkpoint 需開啟)
       --load_pytorch=True
+      
+      # 查看並儲存 模型各層張量名稱和維度 (<output_path>/layer_name_tf.txt)
+      # 會直接中斷程式
+      # layer_name_tf.txt 用於與 pytorch model 比較使用
+      --check_model=False
     ```  
     
     3.2. 執行
@@ -263,7 +268,7 @@
     ```
 
 4. 將pytorch權重 NCHW 轉換成 NHWC 並生成 pickle file  
-    * 詳情請看 tutorial
+    * 詳情[參考](tutorial/weight_transform.md)
 
 ## Demo tensorflow model  
 

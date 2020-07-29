@@ -27,9 +27,6 @@ def check_model(cfg, ckpt):
 
     count = 0
     for key, value in model.state_dict().items():
-        
-        # print(key,value.shape)
-
         if(key.find("num_batches_tracked") != -1):
             pass
         else:
@@ -38,6 +35,16 @@ def check_model(cfg, ckpt):
             count += 1
     
     print("total layer {}".format(count))
+    
+    print(os.path.dirname(ckpt))
+    with open(os.path.dirname(ckpt)+"/layer_name.txt", "w") as outfile:
+        for key, value in model.state_dict().items():
+            if(key.find("num_batches_tracked") != -1):
+                pass
+            else:
+                outfile.write("{} {}\n".format(key,value.shape))
+        outfile.write("total layer {}".format(count))
+        print("save {}".format(os.path.dirname(ckpt)+"/layer_name.txt"))
 
 @torch.no_grad()
 def save_layer_param(cfg, ckpt, save_path, depth_wise, layer_names):
