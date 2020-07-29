@@ -5,6 +5,7 @@ import glob
 
 # full_integer_quantization_with_postprocess - Input=Float32, Output=Float32
 save_model_dir = "/tf/minda/github/TKU_RVL/save_models/tensorflow/tensorflow_model/ssdlite_mobilenet_fpn6_mixconv_512_bdd/tflite/"
+# save_model_dir = "/tf/minda/github/TKU_RVL/out/ssdlite_mobilenet_fpn6_mixconv_512_bdd/tflite/"
 graph_def_file = save_model_dir+"tflite_graph.pb"
 
 dataset_dir = ["/tf/minda/github/detect_ws/dataset/bdd/BDD_train/JPEGImages"]
