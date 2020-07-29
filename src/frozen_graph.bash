@@ -13,7 +13,7 @@ CUDA_VISIBLE_DEVICES=0 python3 /tf/minda/github/TKU_RVL/models/research/object_d
 --output_directory=${MODEL_DIR}/save_model
 
 
-# cal flops
+# cal flops and params
 # CUDA_VISIBLE_DEVICES=0 python3 /tf/minda/github/TKU_RVL/models/research/object_detection/export_inference_graph.py \
 # --input_type=image_tensor \
 # --input_shape=1,512,512,3 \
