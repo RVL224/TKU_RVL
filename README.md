@@ -47,7 +47,8 @@
     3.2. 將生成的資料集放於dataset中
     
 4. VOC-format Dataset to csv file  
-    * csv 輸出每行格式為 (filename,width,height,class,xmin,ymin,xmax,ymax)
+    * csv 輸出每行格式為 (filename,width,height,class,xmin,ymin,xmax,ymax)  
+    
     4.1. 編輯 xml2csv_config.json 
     ```bash
       * label_path: 資料集的標註檔案位置 : (Annotations)
@@ -366,7 +367,7 @@
     ```
     
     2.3 備註
-        * 利用post training 進行量化, 請參考 [Tensorflow Lite post-training]
+        * 利用post training 進行量化, 請參考 [Tensorflow Lite post-training](https://qiita.com/PINTO/items/008c54536fca690e0572)
     
 3. 測試模型  
 

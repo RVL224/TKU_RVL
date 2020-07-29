@@ -148,7 +148,7 @@ def main():
     parser = argparse.ArgumentParser(description="SSD Demo.")
 
     parser.add_argument(
-        "--config-file",
+        "--config_file",
         default="",
         metavar="FILE",
         help="path to config file",
