@@ -22,12 +22,14 @@ RUN apt-get install -y \
     libsm6 libxext6 libxrender-dev \
     protobuf-compiler python-pil python-lxml
 
+RUN pip install --upgrade pip
 RUN pip install -U setuptools
 RUN pip install opencv-python==3.4.7.28
 RUN pip install opencv-contrib-python==3.4.7.28
 RUN pip install tqdm
 RUN pip install pillow
 RUN pip install lxml
+RUN pip install yacs
 
 # install pytorch==1.2 (cuda10)
 RUN pip install torch==1.2.0 torchvision==0.4.0 -f https://download.pytorch.org/whl/torch_stable.html
@@ -63,6 +65,7 @@ RUN apt-get install -y python3-edgetpu
 
 # RUN debconf-set-selections | echo 'libedgetpu1-max libedgetpu1-max/Continue_to_install_the_Edge_TPU_runtime_that_runs_at_the_maximum_operating_frequency?_[yes/no] string yes'
 RUN echo 'yes' >> apt-get install -f -yqq --no-install-recommends libedgetpu1-max
+RUN rm apt-get
 RUN pip install https://dl.google.com/coral/edgetpu_api/edgetpu-2.14.0-py3-none-any.whl
 
 # check api 
@@ -74,4 +77,4 @@ WORKDIR /tf/install_file/edgetpu/compiler/x86_64
 RUN cp -r * /usr/local/bin
 RUN edgetpu_compiler --version
 
-WORKDIR /tf/detect_ws
+WORKDIR /tf
