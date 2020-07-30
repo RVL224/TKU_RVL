@@ -73,7 +73,7 @@
   $ sudo docker images
   
   # run container
-  $ sudo docker run -it --runtime nvidia -e NVIDIA_VISIBLE_DEVICES=0 -p 8888:8888 -name <container_name> -v <host_share_folder_path>:/tf/<share_folder_path> -shm-size='64g' <image_name or image_id>
+  $ sudo docker run -it --runtime nvidia -e NVIDIA_VISIBLE_DEVICES=0 -p 8888:8888 --name <container_name> -v <host_share_folder_path>:/tf/<share_folder_path> --shm-size='64g' <image_name or image_id>
   
   # args
     * -it => keep running
