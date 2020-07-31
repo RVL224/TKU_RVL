@@ -43,7 +43,8 @@
     
 3. 轉換成VOC-format Dataset  
     
-    3.1. 可使用框圖程式內建轉換或自己寫格式
+    3.1. 可使用框圖程式內建轉換或自己寫格式  
+    
     3.2. 將生成的資料集放於dataset中
     
 4. VOC-format Dataset to csv file  

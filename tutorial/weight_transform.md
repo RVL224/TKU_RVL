@@ -19,7 +19,7 @@
 
 ```bash
   # check_model function
-    * usage : 用來跟 tensorflow model 對照 (可以先複製到 layer_name.txt)
+    * usage : 用來跟 tensorflow model 對照 (查看並儲存 pytorch model all layer names)
     * input 
       * cfg : param.yaml
       * ckpt : pytorch_model_weight.pth

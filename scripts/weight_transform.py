@@ -5,6 +5,7 @@ import numpy as np
 import pickle
 
 import torch 
+import torch.onnx
 
 # lib
 from ssd.config import cfg
@@ -24,7 +25,12 @@ def check_model(cfg, ckpt):
     weight_file = ckpt if ckpt else checkpointer.get_checkpoint_file()
     print('Loaded weights from {}'.format(weight_file))
     model.eval()
-
+    
+    # output onnx model
+    #inputs = torch.rand(1, 3, 512, 512).to(device)
+    #onnx_path = "onnx_model_name.onnx"
+    #torch.onnx.export(model, inputs, onnx_path)
+    
     count = 0
     for key, value in model.state_dict().items():
         if(key.find("num_batches_tracked") != -1):
