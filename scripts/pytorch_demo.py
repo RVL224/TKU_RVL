@@ -16,7 +16,7 @@ from ssd.modeling.box_head.inference import PostProcessor
 def parse_args():
   parser = argparse.ArgumentParser(description="SSD Demo.")
   parser.add_argument(
-    "--config-file",
+    "--config_file",
     default="",
     metavar="FILE",
     help="path to config file",
@@ -25,7 +25,6 @@ def parse_args():
   parser.add_argument("--ckpt", type=str, default=None, help="Trained weights.")
   parser.add_argument("--score_threshold", type=float, default=0.7)
   parser.add_argument("--image_file", default=None, type=str, help='Specify a video dir to do prediction.')
-  parser.add_argument("--dataset_type", default="voc", type=str, help='Specify dataset type. Currently support voc and coco.')
     
   parser.add_argument(
     "opts",
@@ -49,7 +48,7 @@ def check_tensor_value(tensor, mode='tf'):
   sys.exit()
 
 @torch.no_grad()
-def run_demo_image(cfg, ckpt, score_threshold, image_name, dataset_type):
+def run_demo_image(cfg, ckpt, score_threshold, image_name):
   class_names = ('__background__',
                  'bike', 'bus', 'car','motor','person','truck','rider')
 
@@ -98,8 +97,7 @@ def main():
     cfg=cfg,
     ckpt=args.ckpt,
     score_threshold=args.score_threshold,
-    image_name=args.image_file,
-    dataset_type=args.dataset_type)
+    image_name=args.image_file)
 
 if __name__ == '__main__':
   main()
