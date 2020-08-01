@@ -1,3 +1,6 @@
+import sys
+import numpy as np
+
 from torch import nn
 import torch.nn.functional as F
 import torch
@@ -9,13 +12,43 @@ model_urls = {
     'mobilenet_v2': 'https://download.pytorch.org/models/mobilenet_v2-b0353104.pth',
 }
 
+def check_tensor_value(tensor, mode='tf'):
+    if(mode == 'tf'):
+        print(tensor.permute(0, 2, 3, 1).shape)
+        print(tensor.permute(0, 2, 3, 1))
+    else:
+        print(tensor.shape)
+        print(tensor)
+
+    sys.exit()
+
+class PrintLayer(nn.Module):
+    def __init__(self, mode='tf'):
+        super(PrintLayer, self).__init__()
+        self.mode = mode
+    
+    def forward(self, x):
+        # Do your print / debug stuff here
+        # print(x.running_mean)
+        if(self.mode == 'tf'):
+            print(x.permute(0, 2, 3, 1).shape)
+            print(x.permute(0, 2, 3, 1))
+        else:
+            print(x.shape)
+            print(x)
+        
+        # return x
+        sys.exit()
+
 class ConvBNReLU(nn.Sequential):
     def __init__(self, in_planes, out_planes, kernel_size=3, stride=1, groups=1):
         padding = (kernel_size - 1) // 2
         super(ConvBNReLU, self).__init__(
             nn.Conv2d(in_planes, out_planes, kernel_size, stride, padding, groups=groups, bias=False),
+            # PrintLayer(),
             nn.BatchNorm2d(out_planes),
-            nn.ReLU6(inplace=True)
+            nn.ReLU6(inplace=True),
+            # PrintLayer(),
         )
 
 class MobileBlock(nn.Sequential):
@@ -165,6 +198,7 @@ class MobileNetV2_fpn6_mixconv(nn.Module):
         features = []
         for i in range(7):
             x = self.features[i](x)
+        # check_tensor_value(x)
         features.append(x)
         for i in range(7,14):
             x = self.features[i](x)

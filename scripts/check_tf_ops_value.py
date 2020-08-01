@@ -40,8 +40,8 @@ def run(model_path, image_file):
       input_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
   
       # output tensor
-      output_tensor = detection_graph.get_tensor_by_name('FeatureExtractor/MobilenetV2/MobilenetV2/input:0')
-    
+      # output_tensor = detection_graph.get_tensor_by_name('FeatureExtractor/MobilenetV2/MobilenetV2/input:0')
+      output_tensor = detection_graph.get_tensor_by_name('FeatureExtractor/MobilenetV2/expanded_conv_5/output:0')
     
       # image preprocess
       frame = cv2.imread(image_file,cv2.IMREAD_COLOR)

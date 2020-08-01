@@ -22,7 +22,7 @@
         * input : 
           * tensor : 欲顯示的張量
           * mode : 
-            * tf : 將輸出格式轉換跟 tensorflow model 一樣
+            * tf : 將輸出格式轉換跟 tensorflow model 一樣 (NCHW -> NHWC)
         * output:
           * print shape and value 
     ```  

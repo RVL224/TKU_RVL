@@ -78,6 +78,11 @@ def run_demo_image(cfg, ckpt, score_threshold, image_name):
     images = transforms(frame_rgb)[0].unsqueeze(0)
     
     # check_tensor_value(images)
+    
+    # ssd model output
+    result = model(images.to(device))[0]
+    
+    # postprocess
 
 def main():
   args = parse_args()

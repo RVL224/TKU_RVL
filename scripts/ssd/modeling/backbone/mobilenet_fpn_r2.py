@@ -158,7 +158,6 @@ class MobileNetV2_fpn_r2(nn.Module):
         for i in range(7):
             x = self.features[i](x)
             # if(i >= 6):
-            #     print("fuck")
             #     print(x.permute(0, 2, 3, 1).shape)
             #     print(x.permute(0, 2, 3, 1))
             #     sys.exit()
@@ -166,7 +165,6 @@ class MobileNetV2_fpn_r2(nn.Module):
         for i in range(7,14):
             x = self.features[i](x)
             # if(i >= 7):
-            #     print("fuck")
             #     print(x.permute(0, 2, 3, 1).shape)
             #     print(x.permute(0, 2, 3, 1))
             #     sys.exit()
@@ -180,7 +178,6 @@ class MobileNetV2_fpn_r2(nn.Module):
             x = self.extras[i](x)
             features.append(x)
         
-        # print("fuck")
         # print(features[5].permute(0, 2, 3, 1).shape)
         # print(features[5].permute(0, 2, 3, 1))
         # sys.exit()
@@ -192,7 +189,6 @@ class MobileNetV2_fpn_r2(nn.Module):
         s1 = self._upsample_add(s2,self.reduce1(features[1]))
         s0 = self._upsample_add(s1,self.reduce0(features[0]))
 
-        # print("fuck")
         # print(s3.permute(0, 2, 3, 1).shape)
         # print(s3.permute(0, 2, 3, 1))
         # sys.exit()
