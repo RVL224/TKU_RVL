@@ -117,8 +117,16 @@
     
     ```  
     
-    3.2 編輯 check_tf_ops_value.py  
+    3.2 程式解釋 check_tf_ops_value.py  
+    
     ```python
+      # run function
+        * usage : 用於模型運算輸出檢查
+        * input :
+          * model_path : 模型位置
+          * image_file : 圖片檔案位置
+        * ouput : 根據 output_tensor 使用而有所不同
+      
       # 修改 output_tensor 中的運算名稱 (可利用tensorboard)
       output_tensor = detection_graph.get_tensor_by_name('<ops_name>:0')
     ```  
