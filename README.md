@@ -107,14 +107,24 @@
 
 ## 讀取 pytorch 權重  
 
-1. 下載 pytorch model  
+1. 步驟整理  
+
+    1.1. 得到 pytorch 權重與參數檔  
+    1.2. 執行 weight_transform.py (check_torch 模式) 生成 layer_name.txt  
+    1.3. 編輯 Tensorflow model 參數檔 (config file)  
+    1.4. 執行 train.bash (check_model 模式) 生成 layer_name_tf.txt  
+    1.5. 比對模型 使模型運算(layer_name.txt)順序達到跟layer_name_tf.txt 一樣 (可生成另一個存放比對後的結果 (layer_name_custom.txt))  
+    1.6. 執行 weight_transform.py (save pickle 模型) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
+    1.7. 執行 train.bash (load_pytorch 模型) 生成 tensorflow model (.pb)  
+
+2. 下載 pytorch model  
 
 ```bash
     $ cd save_models/pytorch
     $ sh download.sh
 ```
 
-2. 編輯 config file  
+3. 編輯 config file  
     * 參考放於 cfg/train/
 ```config
 
@@ -226,13 +236,13 @@
   }
 ```   
 
-3. 生成 tensorflow 模型
+4. 生成 tensorflow 模型
     * 強調 pytorch model 必須與 tensorflow model "一模一樣" 才能讀取 weight
     * pytorch model 請參考 lufficc pytorch ssd
     * 讀取權重是利用 "pickle 檔" 讀取
     * 通常檔案會放於 save_models/tensorflow/tensorflow_model 中，方便之後不用從讀權重，即可訓練　　
     
-    3.1. 編輯 train.bash  
+    4.1. 編輯 train.bash  
         * 參考放於 src/
     ```bash
       CUDA_VISIBLE_DEVICES=0 python <path_of_train.py>
@@ -263,12 +273,12 @@
       --check_model=False
     ```  
     
-    3.2. 執行
+    4.2. 執行
     ```bash
         $ ./train.bash
     ```
 
-4. 將pytorch權重 NCHW 轉換成 NHWC 並生成 pickle file  
+5. 將pytorch權重 NCHW 轉換成 NHWC 並生成 pickle file  
     * 詳情[參考](tutorial/weight_transform.md)
 
 ## Demo tensorflow model  

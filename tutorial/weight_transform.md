@@ -11,7 +11,18 @@
 | cudnn               | 7.6                       |
 
 
-## code 解釋
+## 步驟  
+
+1. 得到 pytorch 權重與參數檔  
+2. 執行 weight_transform.py (check_torch 模式) 生成 layer_name.txt  
+3. 編輯 Tensorflow model 參數檔 (config file)  
+4. 執行 train.bash (check_model 模式) 生成 layer_name_tf.txt  
+5. 比對模型 使模型運算(layer_name.txt)順序達到跟layer_name_tf.txt 一樣 (可生成另一個存放比對後的結果 (layer_name_custom.txt))  
+6. 執行 weight_transform.py (save pickle 模型) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
+7. 執行 train.bash (load_pytorch 模型) 生成 tensorflow model (.pb)  
+
+
+## 查詢 pytorch ops name 和 轉換 pytorch 權重資料格式 之程式
   
   * 尚未優化
   * weight_transform.py

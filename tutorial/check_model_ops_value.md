@@ -46,7 +46,7 @@
     * 目前運算輸出函式放於 mobilenet_fpn6_mixconv.py
     * 之後可將 check_tensor_value、PrintLayer 放入其他函式庫中方便呼叫
     
-    2.1 程式解釋  mobilenet_fpn6_mixconv.py
+    2.1 backbone 程式解釋  mobilenet_fpn6_mixconv.py
     ```python
       # check_tensor_value function
         * usage : 用於檢查運算輸出
@@ -71,7 +71,10 @@
               * 程式中斷 或 輸出 輸入值(x)
     ```  
     
-    2.2 執行  
+    2.2 ssd 程式解釋  
+    
+    
+    2.3 執行  
     ```bash
       $ cd <worksace>/src
       $ ./pytorch_demo.bash
@@ -82,7 +85,10 @@
         * score_threshold : Bounding Box 門檻值
         * image_name : 圖片檔案位置
     ```  
-    
+
+3. 檢查後處理輸出之程式  
+
+
 ## TensorFlow  
 
 1. 固化模型  
