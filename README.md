@@ -113,9 +113,9 @@
     1.2. 執行 weight_transform.py (check_torch 模式) 生成 layer_name.txt  
     1.3. 編輯 Tensorflow model 參數檔 (config file)  
     1.4. 執行 train.bash (check_model 模式) 生成 layer_name_tf.txt  
-    1.5. 比對模型 使模型運算(layer_name.txt)順序達到跟layer_name_tf.txt 一樣 (可生成另一個存放比對後的結果 (layer_name_custom.txt))  
-    1.6. 執行 weight_transform.py (save pickle 模型) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
-    1.7. 執行 train.bash (load_pytorch 模型) 生成 tensorflow model (.pb)  
+    1.5. 比對模型 使模型運算(layer_name.txt)順序達到跟(layer_name_tf.txt)一樣 可生成另一個存放比對後的結果 (layer_name_custom.txt)  
+    1.6. 執行 weight_transform.py (save pickle 模式) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
+    1.7. 執行 train.bash (load_pytorch 模式) 生成 tensorflow model (.pb)  
 
 2. 下載 pytorch model  
 
