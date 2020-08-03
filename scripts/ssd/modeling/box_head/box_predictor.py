@@ -39,7 +39,15 @@ class BoxPredictor(nn.Module):
         # print(cls_logits[0])
         # import sys
         # sys.exit()
-
+        
+        # x, y, w, h
+        # print(bbox_pred[0].shape)
+        # print(bbox_pred[0])
+        # import sys
+        # sys.exit()
+        
+        
+        # concat
         batch_size = features[0].shape[0]
         cls_logits = torch.cat([c.view(c.shape[0], -1) for c in cls_logits], dim=1).view(batch_size, -1, self.cfg.MODEL.NUM_CLASSES)
         bbox_pred = torch.cat([l.view(l.shape[0], -1) for l in bbox_pred], dim=1).view(batch_size, -1, 4)

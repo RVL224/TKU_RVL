@@ -35,6 +35,21 @@ def parse_args():
 
   return parser.parse_args()
 
+def draw_frame(frame, boxes, labels, scores, class_names):
+  for i in range(len(boxes)):
+    print(boxes[i], class_names[int(labels[i])], scores[i])
+    xmin, ymin, xmax, ymax = [int(x) for x in boxes[i, :]]
+    class_name = class_names[int(labels[i])]
+    score = '{:.2f}'.format(scores[i])
+
+    cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 230, 0), 3)
+    cv2.putText(frame, '{:s}'.format(class_name),
+                (xmin, ymin + 14),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.6, (150, 0, 255), 2,
+                cv2.LINE_AA)
+  return frame
+
 def check_tensor_value(tensor, mode='tf'):
   if(mode == 'tf'):
     tensor_np = np.transpose(tensor.detach().numpy(),(0,2,3,1))
@@ -66,6 +81,7 @@ def run_demo_image(cfg, ckpt, score_threshold, image_name):
   
   # build preporcess
   transforms = build_transforms(cfg, is_train=False)
+  post_processor = PostProcessor(cfg)
   
   model.eval()
   
@@ -80,9 +96,19 @@ def run_demo_image(cfg, ckpt, score_threshold, image_name):
     # check_tensor_value(images)
     
     # ssd model output
-    result = model(images.to(device))[0]
+    result = model(images.to(device))
     
     # postprocess
+    result = post_processor(result)[0]
+    result = result.resize((height, width)).to(cpu_device).numpy()
+    boxes, labels, scores = result['boxes'], result['labels'], result['scores']
+    
+    indices = scores > score_threshold
+    boxes = boxes[indices]
+    labels = labels[indices]
+    scores = scores[indices]
+    
+    
 
 def main():
   args = parse_args()

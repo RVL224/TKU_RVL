@@ -44,34 +44,29 @@ class SSDBoxHead(nn.Module):
             bbox_pred, self.priors, self.cfg.MODEL.CENTER_VARIANCE, self.cfg.MODEL.SIZE_VARIANCE
         )
         
+        # x, y, w, h
+        # print('anchor')
+        # print(self.priors.shape)
+        # print(self.priors)
+        
         # print('score')
-        # print(cls_logits.shape)
-        # print(cls_logits)
         # print(scores.shape)
         # print(scores)
-        # print('box')
-        # print(bbox_pred.shape)
-        # print(bbox_pred)
+        
+        # x, y, w, h
+        # print('box_xywh')
         # print(boxes.shape)
         # print(boxes)
-        # for box in scores:
-        #     for item in box:
-        #         print(item)
-        
-        # import sys
-        # sys.exit()
-
+       
         boxes = box_utils.center_form_to_corner_form(boxes)
         detections = (scores, boxes)
         # detections = self.post_processor(detections)
         
-        # for box in boxes:
-        #     for item in box:
-        #         print(item)
-        # print(self.priors.shape)
-        # print(self.priors)
-        # for item in self.priors:
-        #     print(item)
+        # xmin, ymin, xmax, ymax
+        # print('box_xyxy')
+        # print(boxes.shape)
+        # print(boxes)
+        
         # import sys
         # sys.exit()
 

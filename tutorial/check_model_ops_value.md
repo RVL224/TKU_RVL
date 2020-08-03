@@ -71,8 +71,18 @@
               * 程式中斷 或 輸出 輸入值(x)
     ```  
     
-    2.2 ssd 程式解釋  
-    
+    2.2 ssd 程式解釋 scripts/ssd/modeling/box_head/box_predictor.py  
+    ```python
+      # BoxPredictor class
+        * forward function
+          * usage : output ssd model predict (class, bbox)
+          # 尚未 concat
+            * cls_logits : class (type : list) 
+            * bbox_pred : bbox (x, y, w, h) (type : list)
+          # 已 concat
+            * cls_logits : class ( type : tensor) 
+            * bbox_pred : bbox (x, y, w, h) (type: tensor)
+    ```  
     
     2.3 執行  
     ```bash
@@ -88,7 +98,42 @@
 
 3. 檢查後處理輸出之程式  
 
-
+    3.1. anchor 程式解釋 scripts/ssd/modeling/box_head/box_head.py  
+    ```python
+      # SSDBoxHead class
+        * _forward_test function
+          * usage : 後處理執行測試使用，已關閉 postprocess
+          * self.priors : anchor (x, y, w, h)
+          * scores : score
+          * boxes : bounding box (x, y, w, h) -> (xmin, ymin, xmax, ymax)
+    ```  
+    
+    3.2 postprocess 程式解釋 scripts/pytorch_demo.py  
+    * 最後預測輸出
+    ```python
+      # postprocess
+      result = post_processor(result)[0]
+      result = result.resize((height, width)).to(cpu_device).numpy()
+      boxes, labels, scores = result['boxes'], result['labels'], result['scores']
+    
+      indices = scores > score_threshold
+      boxes = boxes[indices]
+      labels = labels[indices]
+      scores = scores[indices]
+    ```  
+    
+    3.3 執行  
+    ```bash
+      $ cd <worksace>/src
+      $ ./pytorch_demo.bash
+      
+      # pytorch_demo.py args
+        * cfg : pytorch model 參數
+        * ckpt : pytorch model 權重
+        * score_threshold : Bounding Box 門檻值
+        * image_name : 圖片檔案位置
+    ```
+    
 ## TensorFlow  
 
 1. 固化模型  
@@ -178,6 +223,39 @@
       
       # 修改 output_tensor 中的運算名稱 (可利用可視化工具 tensorboard、netron)
       output_tensor = detection_graph.get_tensor_by_name('<ops_name>:0')
+      
+      """ 
+        anchor : 程式執行順序, 將影響 tensor 名稱順序 (可以指定tensor名稱解決)
+        reference : models/research/object_detection/core/box_list.py
+          function: get_center_coordinates_and_sizes
+      """
+      w_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/get_center_coordinates_and_sizes/clip_by_value:0')
+      h_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/get_center_coordinates_and_sizes/clip_by_value_1:0')
+      cy_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/get_center_coordinates_and_sizes/clip_by_value_2:0')
+      cx_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/get_center_coordinates_and_sizes/clip_by_value_3:0')
+      
+      """ 
+        bounding box 
+          x, y, w, h
+          xmin, ymin, xmax, ymax
+          
+        # reference : models/research/object_detection/box_coders/faster_rcnn_box_coder.py
+        # fucntion : _decode
+        # 程式執行順序, 將影響 tensor 名稱順序 (可以指定tensor名稱解決)
+        # 最需注意: 執行結果順序 bbox(x, y, w, h) 跟轉移權重的模型有關 (目前使用肉眼比對解決)
+      """
+      # x, y, w, h
+      bw_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/mul:0')
+      bh_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/mul_1:0')
+      bcy_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/add:0')
+      bcx_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/add_1:0')
+      
+      # xmin, ymin, xmax, ymax  
+      bymin_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/sub:0')
+      bxmin_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/sub_1:0')
+      bymax_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/add_2:0')
+      bxmax_tensor = detection_graph.get_tensor_by_name('Postprocessor/Decode/add_3:0')
+      
     ```  
     
     3.3 執行　　
