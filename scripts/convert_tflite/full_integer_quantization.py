@@ -22,7 +22,6 @@ converter.inference_type = tf.lite.constants.QUANTIZED_UINT8
 converter.allow_custom_ops = True
 input_arrays = converter.get_input_arrays()
 converter.quantized_input_stats = {input_arrays[0] : (128., 1.)}
-converter.representative_dataset = representative_dataset_gen
 tflite_quant_model = converter.convert()
 
 # output
