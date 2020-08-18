@@ -1,3 +1,9 @@
+"""
+  Post-training float16 quantization
+    * dataset: no dataset
+    * Supported hardware: CPU, GPU
+    * input/output type: float32
+"""
 import tensorflow as tf
 
 tf.compat.v1.enable_eager_execution()
