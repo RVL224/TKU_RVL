@@ -419,7 +419,7 @@
 
 2. 透過 transfer.bash 生成 tflite模型 (.tflite)
 
-    2.1. 編輯 transfer.bash 
+    2.1. 編輯 transfer.bash  
         * 參考放於　src/
     ```bash
       
@@ -491,8 +491,8 @@
         $ ./transfer.bash
     ```
     
-    2.3 post-training 方法
-        * 程式實現，[參考](scripts/convert_tflite)
+    2.3 post-training 方法  
+        * 程式實現，[參考](scripts/convert_tflite)  
         * 其他模型 post-training, 請參考 [Tensorflow Lite post-training](https://qiita.com/PINTO/items/008c54536fca690e0572)  
 
 3. 生成 edgetpu 模型  (*_edgetpu.tflite)
