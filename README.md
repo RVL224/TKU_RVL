@@ -212,14 +212,16 @@
     
 1. 步驟整理  
 
+    * [參考](tutorial/weight_transform.md)
+    
     1.1. 得到 pytorch 權重與參數檔  
-    1.2. 執行 weight_transform.py (check_torch 模式) 生成 layer_name.txt  
+    1.2. 執行 weight_transform.bash (check_torch 模式) 生成 layer_name.txt  
     1.3. 編輯 Tensorflow model 參數檔 (config file)  
     1.4. 執行 train.bash (check_model 模式) 生成 layer_name_tf.txt  
     1.5. 比對模型 使模型運算(layer_name.txt)順序達到跟(layer_name_tf.txt)一樣 可生成另一個存放比對後的結果 (layer_name_custom.txt)  
         * 如果有多出 bias 運算，可能是pytorch 使用 batchnorm 時，忘記關閉 conv 中的 bias。如果是，可以刪除bias，不影響預測結果  
       
-    1.6. 執行 weight_transform.py (save pickle 模式) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
+    1.6. 執行 weight_transform.bash (save pickle 模式) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
     1.7. 執行 train.bash (load_pytorch 模式) 生成 tensorflow model (.ckpt)  
     1.8. 確認模型成功，[參考](tutorial/check_model_ops_value.md)
 
