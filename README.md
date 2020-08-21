@@ -29,12 +29,106 @@
 | yacs                | 0.1.7                     |    
 
 
-2. 架設  
+2. object detection api 架設  
 
-3. tensorflow 模型建構相關資料夾 (object detection api)  
+    2.1. 安裝相依套件  
+    ```bash
+      $ sudo apt-get update
+      $ sudo apt-get install -y \
+        git wget curl \
+        libsm6 libxext6 libxrender-dev \
+        protobuf-compiler python-pil python-lxml
+      
+      $ pip3 install --upgrade pip
+      $ pip3 install -U setuptools
+      $ pip3 install opencv-python==3.4.7.28
+      $ pip3 install opencv-contrib-python==3.4.7.28
+      $ pip3 install tqdm
+      $ pip3 install pillow
+      $ pip3 install lxml
+    ```  
+    
+    2.2. workspace setting  
+    ```bash
+      $ git clone https://github.com/RVL224/TKU_RVL.git
+      $ git checkout -b edgetpu
+      
+      $ cd <workspace_path>
+      
+      # 編譯protobuf (生成模型定義參數檔)
+      $ cd models/research/
+      $ protoc object_detection/protos/*.proto --python_out=.
+    ```  
+    
+    2.3. 設定 PYTHONPATH 之環境變數  
+    ```bash
+      $ vim ~/.bashrc
+
+      * 在最後ㄧ行加入以下指令
+
+      # for object deetection api 
+      export TF_OBJECT_DETECTION="<workspace_path>/models/research:<workspace_path>/models/research/slim"
+      export PYTHONPATH="${PYTHONPATH:-${TF_OBJECT_DETECTION}}"
+
+      # 存檔後 初始環境
+      $ source ~/.bashrc
+    ```  
+    
+    2.4. 測試環境是否架好  
+    ```bash
+      # 如果環境架設沒錯 會顯示 "OK"
+      $ python object_detection/builders/model_builder_test.py
+    ```  
+    
+3. pytorch模型 環境架設  
+    
+    3.1. 安裝相依套件  
+    ```bash
+      # install pytorch==1.2 (cuda10)
+      $ pip3 install torch==1.2.0 torchvision==0.4.0 -f https://download.pytorch.org/whl/torch_stable.html
+      $ pip3 install yacs
+    ```  
+    
+4. edgetpu python api  
+
+    4.1. 安裝相依套件  
+    ```bash
+      $ echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
+      $ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+      $ sudo apt-get update
+      $ sudo apt-get install python3-edgetpu
+      
+      # the edge TPU runtime, at maximum operating frequency.
+      $ sudo apt-get install  libedgetpu1-max
+    ```  
+    
+    4.2. 安裝api  
+    ```bash
+      $ pip3 install https://dl.google.com/coral/edgetpu_api/edgetpu-2.14.1-py3-none-any.whl
+      
+      # check edgetpu version
+      $ python3 -c "import edgetpu.basic.edgetpu_utils; print(edgetpu.basic.edgetpu_utils.GetRuntimeVersion())"
+    ```  
+    
+    4.3. 安裝 edgetpu compiler  
+    ```bash
+      # 目前只有這個版本(2.1.302470888)可編譯過
+      $ git clone -b eel https://github.com/google-coral/edgetpu.git 
+      
+      $ cd edgetpu/compiler/x86_64
+      $ sudo cp -r * /usr/local/bin
+      
+      # 檢查版本
+      $ edgetpu_compiler --version
+      
+      # tflite to edgetpu 編譯方式
+      $ edgetpu_compiler <path_of_tflite_file>
+    ```  
+     
+5. tensorflow 模型建構相關資料夾 (object detection api)  
     * models  
 
-4. pytorch 模型建構相關資料夾  
+6. pytorch 模型建構相關資料夾  
     * scripts/ssd
 
 ## 準備資料集
@@ -43,8 +137,8 @@
 
 2. 使用框圖程式製作訓練集  
 
-    2.1. labelme
-    
+    2.1. [labelme](https://github.com/wkentaro/labelme)  
+      
 3. 轉換成VOC-format Dataset  
     
     3.1. 可使用框圖程式內建轉換或自己寫格式  
@@ -248,7 +342,7 @@
   }
 ```   
 
-4. 生成 tensorflow 模型
+4. 透過 train.bash 生成 tensorflow 模型權重檔 (.ckpt)  
     * 強調 pytorch model 必須與 tensorflow model "一模一樣" 才能讀取 weight
     * pytorch model 請參考 lufficc pytorch ssd
     * 讀取權重是利用 "pickle 檔" 讀取
@@ -291,11 +385,14 @@
     ```
 
 5. 將pytorch權重 NCHW 轉換成 NHWC 並生成 pickle file  
-    * 詳情[參考](tutorial/weight_transform.md)
+    * 詳情[參考](tutorial/weight_transform.md)  
 
-## Demo tensorflow model  
+6. tensorflow模型 和 pytorch模型 兩者輸出比對  
+    * 詳情[參考](tutorial/check_model_ops_value.md)
 
-1. 固化模型  
+## 模型轉換 ( tensorflow & tflite & edgetpu )  
+
+1. 透過 frozen_graph.bash 生成固化模型 (.pb)  
 
     1.1. 編輯 frozen_graph.bash  
         * 參考放於　src/
@@ -320,7 +417,7 @@
         $ ./frozen_graph.bash
     ```  
 
-2. 轉換tflite模型  
+2. 透過 transfer.bash 生成 tflite模型 (.tflite)
 
     2.1. 編輯 transfer.bash 
         * 參考放於　src/
@@ -394,12 +491,22 @@
         $ ./transfer.bash
     ```
     
-    2.3 備註
-        * 利用post training 進行量化, 請參考 [Tensorflow Lite post-training](https://qiita.com/PINTO/items/008c54536fca690e0572)
-    
-3. 測試模型  
+    2.3 post-training 方法
+        * 程式實現，[參考](scripts/convert_tflite)
+        * 其他模型 post-training, 請參考 [Tensorflow Lite post-training](https://qiita.com/PINTO/items/008c54536fca690e0572)  
 
-    3.1. 編輯 detect_process.json  
+3. 生成 edgetpu 模型  (*_edgetpu.tflite)
+    * 需要使用 tflite模型
+    * tflite 模型所有 輸入輸出、運算、權重 都必須 uint8 量化  
+```bash
+  $ edgetpu_compiler <path_of_tflite_model>
+```
+
+## Demo tensorflow model  
+
+1. 測試模型  
+
+    1.1. 編輯 detect_process.json  
         * 參考放於　cfg/demo
     ```json
       * PATH_FROZEN_GRAPH : 固化模型位置 (.pb)
@@ -426,7 +533,7 @@
       * PATH_TPU : edgetpu 模型位置 (.tflite)
     ```
     
-    3.2. 執行 demo  
+    1.2. 執行 demo  
    ```bash
      $ python detect_process.py
         
@@ -447,7 +554,7 @@
        --show=false
     ```
     
-    3.3 備註  
+    1.3 備註  
     ```txt
         * graph, tflite, edgetpu model (不管是否有量化)
         # demo程式 單純只針對特定幾個模型進行前處理調整，如果當前處理方式改變或有些許差異，就必須調整前處理方式
@@ -496,10 +603,14 @@
 
 ## 參考
 
-1. 使用
-    * [object detection api](https://github.com/tensorflow/models/tree/master/research/object_detection)
+1. 使用  
     * [labelme](https://github.com/wkentaro/labelme)
- 
+    * [object detection api](https://github.com/tensorflow/models/tree/master/research/object_detection)
+    * [lufficc pytorch ssd](https://github.com/lufficc/SSD?fbclid=IwAR2WFi1g6gbpH8GzSBBO-ERHTUIX7VXbPbTtK5Z-kIT1h-dSWlx3GEHkkqc)
+    * [edgetpu github](https://github.com/google-coral/edgetpu/tree/master)
+    * [edgetpu python api guide](https://coral.ai/docs/edgetpu/api-intro/#edge-tpu-api-overview)
+    * [edgetpu python api software](https://coral.ai/software/#debian-packages)  
+    
 2. 教學  
     2.1. 量化達人
     * [Super PINTO](https://twitter.com/PINTO03091)
