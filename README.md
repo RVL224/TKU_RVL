@@ -203,8 +203,13 @@
          .
     ```
 
-## 讀取 pytorch 權重  
+## 讀取 pytorch 權重與訓練模型  
 
+* train.bash 用途  
+    * 模型運算名稱和維度(--check_model=True)  
+    * 讀取pytorch權重(--load_pytorch=True)
+    * 訓練模型(包括quant-aware-training)  
+    
 1. 步驟整理  
 
     1.1. 得到 pytorch 權重與參數檔  
@@ -216,6 +221,7 @@
       
     1.6. 執行 weight_transform.py (save pickle 模式) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
     1.7. 執行 train.bash (load_pytorch 模式) 生成 tensorflow model (.ckpt)  
+    1.8. 確認模型成功，[參考](tutorial/check_model_ops_value.md)
 
 2. 下載 pytorch model  
 ```bash
