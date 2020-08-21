@@ -1,3 +1,10 @@
+"""
+  Post-training dynamic range quantization
+    * dataset : no dataset
+    * supported hardware: CPU, GPU(Android)
+    * input/output type: float32
+    * only weight quantization (8-bits of precision) 
+"""
 import tensorflow as tf
 
 tf.compat.v1.enable_eager_execution()
@@ -18,6 +25,7 @@ input_tensor={"normalized_input_image_tensor":[1,512,512,3]}
 converter = tf.lite.TFLiteConverter.from_frozen_graph(graph_def_file, input_arrays, 
                                                       output_arrays,input_tensor)
 converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+
 converter.allow_custom_ops = True
 tflite_quant_model = converter.convert()
 

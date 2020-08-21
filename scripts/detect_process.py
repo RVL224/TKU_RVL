@@ -224,6 +224,7 @@ def show_image(cfg,engine,args,mode = 'single'):
         
       # quantize model
       frame_resize = frame_resize.astype(np.uint8)
+      
       frame_expanded = np.expand_dims(frame_resize, axis=0)
     elif(args.engine == 'tpu'):
       frame_rgb = cv2.resize(frame_rgb,(512,512))

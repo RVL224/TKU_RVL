@@ -72,7 +72,7 @@ RUN pip install https://dl.google.com/coral/edgetpu_api/edgetpu-2.14.0-py3-none-
 RUN python -c "import edgetpu.basic.edgetpu_utils; print(edgetpu.basic.edgetpu_utils.GetRuntimeVersion())"
 
 # setup edgetpu compiler
-RUN git clone https://github.com/google-coral/edgetpu.git
+RUN git -b eel clone https://github.com/google-coral/edgetpu.git
 WORKDIR /tf/install_file/edgetpu/compiler/x86_64
 RUN cp -r * /usr/local/bin
 RUN edgetpu_compiler --version

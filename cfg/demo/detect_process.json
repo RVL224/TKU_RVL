@@ -1,6 +1,6 @@
 {
   "PATH_FROZEN_GRAPH": "/tf/minda/github/TKU_RVL/save_models/tensorflow/tensorflow_model/ssdlite_mobilenet_fpn6_mixconv_512_bdd/save_model/frozen_inference_graph.pb",
-  "PATH_TFLITE": "/tf/minda/github/TKU_RVL/out/ssdlite_mobilenet_fpn6_mixconv_512_bdd/tflite/mobilenet_30.tflite",
+  "PATH_TFLITE": "/tf/minda/github/TKU_RVL/scripts/convert_tflite/ssdlite_mobilenet_mixnet_512_float32.tflite",
   "PATH_TPU": "mobilenet_edgetpu.tflite",
 
   "PATH_TO_LABELS": "../label/bdd_label_map_custom.pbtxt",

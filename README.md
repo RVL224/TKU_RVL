@@ -22,7 +22,7 @@
 | python-pil          | 7.1.1                     |
 | python-lxml         | 4.5.0                     |
 | tqdm                | 4.45.0                    |
-| edgetpu_compiler    | 2.1.302470888 above       |
+| edgetpu_compiler    | 2.1.302470888             |
 | edgetpu_runtime     | 13                        |
 | torch               | 1.2.0                     |
 | torchvision         | 0.4.0                     |
@@ -31,7 +31,11 @@
 
 2. 架設  
 
+3. tensorflow 模型建構相關資料夾 (object detection api)  
+    * models  
 
+4. pytorch 模型建構相關資料夾  
+    * scripts/ssd
 
 ## 準備資料集
 
@@ -114,11 +118,12 @@
     1.3. 編輯 Tensorflow model 參數檔 (config file)  
     1.4. 執行 train.bash (check_model 模式) 生成 layer_name_tf.txt  
     1.5. 比對模型 使模型運算(layer_name.txt)順序達到跟(layer_name_tf.txt)一樣 可生成另一個存放比對後的結果 (layer_name_custom.txt)  
+        * 如果有多出 bias 運算，可能是pytorch 使用 batchnorm 時，忘記關閉 conv 中的 bias。如果是，可以刪除bias，不影響預測結果  
+      
     1.6. 執行 weight_transform.py (save pickle 模式) 將 pytorch 權重資料格式 NCHW 轉換成 NHWC 並生成 pickle file  
-    1.7. 執行 train.bash (load_pytorch 模式) 生成 tensorflow model (.pb)  
+    1.7. 執行 train.bash (load_pytorch 模式) 生成 tensorflow model (.ckpt)  
 
 2. 下載 pytorch model  
-
 ```bash
     $ cd save_models/pytorch
     $ sh download.sh
@@ -158,7 +163,8 @@
           #min_scale: 0.20000000298
           #max_scale: 0.949999988079
           
-          # 自定義
+          # 自定義 
+          # aspect 請照順序
           scales: [0.04, 0.1, 0.26, 0.42, 0.58, 0.74, 0.9]
           aspect_ratios: 1.0
           aspect_ratios: 2.0
@@ -169,8 +175,8 @@
           height_stride: [8, 16, 32, 64, 128, 256]
           width_stride: [8, 16, 32, 64, 128, 256]
           
-          # 將第一個feature map 也使用 aspect_ratios 全部種類計算
-          # 如果沒使用 目前程式內 只使用 3 種 (詳細：multiple_grid_anchor_generator.py)
+          # 對第一個feature map 也使用 aspect_ratios 全部種類計算
+          # 如果為true 目前模型 只使用 3 種 [big square, h/w rect] (詳細：multiple_grid_anchor_generator.py)
           #reduce_boxes_in_lowest_layer: false
         }
       } 
@@ -192,6 +198,12 @@
   }
   
   train_config {
+    # 資料增強
+    # 參數參考(models/research/object_detection/protos/preprocessor.proto)
+    data_augmentation_options{
+      
+    }
+    
     # 訓練步數 (讀取權重時, 只要調 1 就行了)
     num_steps: 1
 
@@ -227,7 +239,7 @@
   # 量化訓練 (如果要量化可打開使用，不用的話用註解方式關閉)
   graph_rewriter {
     quantization {
-      # 量化統計 根據需求調整 通常等 float模型 穩定再執行
+      # 訓練步數達到多少時，開始量化統計 根據需求調整 通常等 float模型 穩定再執行
       delay: 1000
 
       weight_bits: 8
@@ -355,7 +367,7 @@
       --input_arrays
       
       # 輸出tensor名稱 (如果有加入後處理: TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3)
-      -output_arrays
+      --output_arrays
       
       # 量化處理需要(對參數影響很大)
       --mean_values
